@@ -15,11 +15,17 @@ class RecipeBox extends React.Component {
 		};
 
   }
-  handleDetails(index){
-    (document.getElementsByClassName('recipeDetails')[index].style.display==='block')
-    ? document.getElementsByClassName('recipeDetails')[index].style.display='none'
-    : document.getElementsByClassName('recipeDetails')[index].style.display='block';
 
+  handleClick(event) {
+    let allDetails = document.getElementsByClassName('recipeDetails');
+    let target = event.target;
+    let details = target.getElementsByClassName('recipeDetails')[0];
+    for (let i=0; i<allDetails.length; i++){
+      if (allDetails[i].id!==details.id) {allDetails[i].style.display='none'};
+    }
+    details.style.display === 'block'
+    ? details.style.display = 'none'
+    : details.style.display = 'block';
   }
 
   saveToLocalStorage() {
@@ -35,15 +41,17 @@ class RecipeBox extends React.Component {
     }
   }
   render() {
-
+    let style = {
+        display: 'none'
+      }
     var recipeList = this.getFromLocalStorage();
     console.log(recipeList);
     var buttonDelete = <button className="buttonDelete" type='button'>Delete</button>;
     var buttonEdit = <button className='buttonedit' type='button'>Edit</button>;
     recipeList = recipeList.map((e, index) =>
-    {  return <li onClick={() => this.handleDetails(index)} className='recipeItem' key={index}>
+    {  return <li onClick={this.handleClick} className='recipeItem' key={index}>
                 {e.title}
-                <div className='recipeDetails'>
+                <div id ={'details'+index} className='recipeDetails' style={style}>
                   <Recipe ingredients={e.ingredients}/>
                   {buttonDelete}
                   {buttonEdit}
