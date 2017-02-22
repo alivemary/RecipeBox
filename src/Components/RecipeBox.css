@@ -4,6 +4,7 @@
   margin: 30px;
   border-radius: 5px;
   background-color: #F5F5F5;
+  text-align: left;
 }
 .recipeItem {
   border: 1px solid green;
@@ -37,6 +38,13 @@ button {
 }
 .buttonDelete {
   background-color: red;
+}
+.buttonAdd {
+  background-color: blue;
+  color: white;
+  width: 100px;
+  margin-left: 50px;
+  margin-bottom: 30px;
 }
 .recipeDetails {
   display: none;

@@ -1,6 +1,7 @@
 import React from 'react';
 import "./RecipeBox.css";
 import Recipe from './Recipe';
+import EditWindow from './EditWindow';
 
 class RecipeBox extends React.Component {
   constructor (props) {
@@ -15,7 +16,6 @@ class RecipeBox extends React.Component {
 		};
 
   }
-
   handleClick(index) {
     let current = this.state.recipes;
     current.forEach((e, i) => {
@@ -24,7 +24,15 @@ class RecipeBox extends React.Component {
     this.setState({recipes: current});
     this.saveToLocalStorage();
   }
-
+  edit() {
+    //
+  }
+  add() {
+    //
+  }
+  delete() {
+    //
+  }
   saveToLocalStorage() {
     let JSONRecipes = JSON.stringify(this.state.recipes);
     localStorage.setItem('RecipeBox', JSONRecipes);
@@ -47,7 +55,8 @@ class RecipeBox extends React.Component {
     var recipeList = this.getFromLocalStorage();
     console.log(recipeList);
     var buttonDelete = <button className="buttonDelete" type='button'>Delete</button>;
-    var buttonEdit = <button className='buttonedit' type='button'>Edit</button>;
+    var buttonEdit = <button className='buttonEdit' type='button'>Edit</button>;
+    var buttonAdd = <button className='buttonAdd' type='button'>Add new</button>;
     recipeList = recipeList.map((e, index) =>
     { return <li onClick={() => this.handleClick(index)} className='recipeItem' key={index}>
                 {e.title}
@@ -60,6 +69,8 @@ class RecipeBox extends React.Component {
     return (
       <div className="RecipeBox">
         <ul>  {recipeList} </ul>
+        {buttonAdd}
+        <EditWindow />
       </div>
 
     );
