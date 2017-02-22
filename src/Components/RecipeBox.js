@@ -7,29 +7,26 @@ class RecipeBox extends React.Component {
 		super (props);
 		this.state = {
       recipes: [
-        {title: 'Spahetti', ingredients: ['pasta', 'tomato sause', 'meatballs']},
-        {title: 'Pumpkin soup', ingredients: ['pumpkin', 'cream', 'water']},
-        {title: 'Pizza', ingredients: ['tomato', 'cheese']}
+        {title: 'Spahetti', ingredients: ['pasta', 'tomato sause', 'meatballs'], classString: ''},
+        {title: 'Pumpkin soup', ingredients: ['pumpkin', 'cream', 'water'], classString: ''},
+        {title: 'Pizza', ingredients: ['tomato', 'cheese'], classString: ''}
       ],
       isModalOpen: false
 		};
 
   }
 
-  handleClick(event) {
-    let allDetails = document.getElementsByClassName('recipeDetails');
-    let target = event.target;
-    let details = target.getElementsByClassName('recipeDetails')[0];
-    for (let i=0; i<allDetails.length; i++){
-      if (allDetails[i].id!==details.id) {allDetails[i].style.display='none'};
-    }
-    details.style.display === 'block'
-    ? details.style.display = 'none'
-    : details.style.display = 'block';
+  handleClick(index) {
+    let current = this.state.recipes;
+    current.forEach((e, i) => {
+      e.classString = (i !== index) ? '' : (e.classString !== '') ? '' : 'active'
+    });
+    this.setState({recipes: current});
+    this.saveToLocalStorage();
   }
 
   saveToLocalStorage() {
-    var JSONRecipes = JSON.stringify(this.state.recipes);
+    let JSONRecipes = JSON.stringify(this.state.recipes);
     localStorage.setItem('RecipeBox', JSONRecipes);
   }
   getFromLocalStorage(){
@@ -37,21 +34,24 @@ class RecipeBox extends React.Component {
   }
   componentWillMount(){
     if (localStorage.getItem("RecipeBox") === null) {
-      this.saveToLocalStorage();
+         this.saveToLocalStorage();
+    }
+    else {
+      let JSONRecipes = JSON.stringify(this.state.recipes);
+      if (JSONRecipes !== localStorage['RecipeBox']) {
+        this.setState({recipes: JSON.parse(localStorage['RecipeBox'])});
+      }
     }
   }
   render() {
-    let style = {
-        display: 'none'
-      }
     var recipeList = this.getFromLocalStorage();
     console.log(recipeList);
     var buttonDelete = <button className="buttonDelete" type='button'>Delete</button>;
     var buttonEdit = <button className='buttonedit' type='button'>Edit</button>;
     recipeList = recipeList.map((e, index) =>
-    {  return <li onClick={this.handleClick} className='recipeItem' key={index}>
+    { return <li onClick={() => this.handleClick(index)} className='recipeItem' key={index}>
                 {e.title}
-                <div id ={'details'+index} className='recipeDetails' style={style}>
+                <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
                   {buttonDelete}
                   {buttonEdit}

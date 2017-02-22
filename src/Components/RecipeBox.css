@@ -38,7 +38,12 @@ button {
 .buttonDelete {
   background-color: red;
 }
-
+.recipeDetails {
+  display: none;
+}
+.active {
+  display: block;
+}
 .modalDialog {
 	position: fixed;
 	font-family: Arial, Helvetica, sans-serif;
