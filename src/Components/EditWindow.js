@@ -23,22 +23,23 @@ class EditWindow extends React.Component {
       	pointerEvents: 'auto'
       }
     }
-    let value = (this.props.data.modal.type === 'edit')
-    ? this.props.data.recipes[this.props.data.modal.index].title
-    : "";
-    let textarea = (this.props.data.modal.type === 'edit')
-    ? this.props.data.recipes[this.props.data.modal.index].ingredients.join(', ')
-    : "";
+    var value = '', textarea = '', windowTitle = 'Add Recipe';
+    if (this.props.data.modal.type === 'edit') {
+      var recipe = this.props.data.recipes[this.props.data.modal.index];
+      value = recipe.title;
+      textarea = recipe.ingredients.join(', ');
+      windowTitle = 'Edit Recipe';
+    }
     return (
       <div style={styleVisible} className='modalDialog'>
       <div>
       <a onClick={this.props.onClose} title="Close" className="close">X</a>
-      <h3>Edit Recipe</h3>
+      <h3>{windowTitle}</h3>
         <hr />
         <label htmlFor='title'>Recipe</label><br />
         <input value={value} style={styleTitle} id='title' type="text" /><br />
-        <label htmlFor='ingrids'>Ingridients</label><br />
-        <textarea value={textarea} style={styleIngrids} id='ingrids' type="text" />
+        <label htmlFor='ingreds'>Ingredients</label><br />
+        <textarea value={textarea} style={styleIngrids} id='ingreds' type="text" />
         <hr />
         {buttonSave}
         {buttonClose}
