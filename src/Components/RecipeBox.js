@@ -12,7 +12,7 @@ class RecipeBox extends React.Component {
         {title: 'Pumpkin soup', ingredients: ['pumpkin', 'cream', 'water'], classString: ''},
         {title: 'Pizza', ingredients: ['tomato', 'cheese'], classString: ''}
       ],
-      isModalOpen: false
+      modal: {isOpen: false, type: 'none', index: null}
 		};
 
   }
@@ -24,17 +24,21 @@ class RecipeBox extends React.Component {
     this.setState({recipes: current});
     this.saveToLocalStorage();
   }
-  edit() {
-    this.setState({isModalOpen: true});
+  edit(index) {
+    let current = this.state.modal;
+    current.isOpen = true;
+    current.type = 'edit';
+    current.index = index.index;
+    this.setState({modal: current});
   }
   add() {
-    this.setState({isModalOpen: true});
+    this.setState({modal: {isOpen: true, type: 'add', index: null}});
   }
   delete() {
     //
   }
   close() {
-    this.setState({isModalOpen: false});
+    this.setState({modal: {isOpen: false, type: 'none', index: null}});
   }
   saveToLocalStorage() {
     let JSONRecipes = JSON.stringify(this.state.recipes);
@@ -64,14 +68,16 @@ class RecipeBox extends React.Component {
                 <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
                   <a href='#editWin' className="button buttonDelete" type='button'>Delete</a>
-                  <a onClick={() => this.edit()} className='button buttonEdit' type='button'>Edit</a>
+                  <a onClick={() => this.edit({index})}
+                     className='button buttonEdit'
+                     type='button'>Edit</a>
                 </div>
               </li>});
     return (
       <div className="RecipeBox">
         <ul>  {recipeList} </ul>
         <a onClick={() => this.add()}  className='button buttonAdd' type='button'>Add Recipe</a>
-        <EditWindow isOpen={this.state.isModalOpen} onClose={() => this.close()}/>
+        <EditWindow data={this.state} onClose={() => this.close()} />
       </div>
 
     );
