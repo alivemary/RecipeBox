@@ -5,22 +5,26 @@
   border-radius: 5px;
   background-color: #F5F5F5;
   text-align: left;
+  padding-bottom: 30px;
 }
 .recipeItem {
   border: 1px solid green;
   margin: 10px;
   border-radius: 5px;
   padding: 10px;
+  padding-bottom: 20px;
   background-color: azure;
   text-align: left;
 }
-.recipeItem > ul {
+.recipeDetails > ul {
   list-style: none;
+  margin-bottom: 20px;
 }
 .RecipeBox > ul {
   margin-left: 10px;
   margin-right: 10px;
   padding-left: 10px;
+  padding-bottom: 5px;
   list-style: none;
 }
 .ingredient {
@@ -40,17 +44,36 @@ button {
   background-color: red;
 }
 .buttonAdd {
-  background-color: blue;
-  color: white;
+  background-color: green;
   width: 100px;
   margin-left: 50px;
   margin-bottom: 30px;
+}
+.buttonEdit {
+  background-color: lightgrey;
+  color: black;
 }
 .recipeDetails {
   display: none;
 }
 .active {
   display: block;
+}
+a {
+  color: white;
+}
+a.button {
+    appearance: button;
+    border-radius: 5px;
+    border: 1px solid grey;
+    text-decoration: none;
+    margin-left: 50px;
+    padding: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+input, textarea {
+  margin-bottom: 10px;
 }
 .modalDialog {
 	position: fixed;
@@ -75,19 +98,27 @@ button {
 }
 
 .modalDialog > div {
-	width: 500px;
+	width: 480px;
 	position: relative;
 	margin: 10% auto;
 	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
-	background: #fff;
-	background: -moz-linear-gradient(#fff, #999);
-	background: -webkit-linear-gradient(#fff, #999);
-	background: -o-linear-gradient(#fff, #999);
+	background: #F5F5F5;
+	background: -moz-linear-gradient(#F5F5F5, lightgrey);
+	background: -webkit-linear-gradient(#F5F5F5, lightgrey);
+	background: -o-linear-gradient(#F5F5F5, lightgrey);
 }
 
-
-
+@media (max-width: 320px) {
+    .modalDialog > div {
+        width: 300px;
+    }
+}
+@media (min-width: 768px) {
+    .modalDialog > div {
+        width: 480px;
+    }
+}
 .close {
 	background: #606061;
 	color: #FFFFFF;

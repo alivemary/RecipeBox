@@ -25,13 +25,16 @@ class RecipeBox extends React.Component {
     this.saveToLocalStorage();
   }
   edit() {
-    //
+    this.setState({isModalOpen: true});
   }
   add() {
-    //
+    this.setState({isModalOpen: true});
   }
   delete() {
     //
+  }
+  close() {
+    this.setState({isModalOpen: false});
   }
   saveToLocalStorage() {
     let JSONRecipes = JSON.stringify(this.state.recipes);
@@ -48,29 +51,27 @@ class RecipeBox extends React.Component {
       let JSONRecipes = JSON.stringify(this.state.recipes);
       if (JSONRecipes !== localStorage['RecipeBox']) {
         this.setState({recipes: JSON.parse(localStorage['RecipeBox'])});
+
       }
     }
   }
   render() {
     var recipeList = this.getFromLocalStorage();
     console.log(recipeList);
-    var buttonDelete = <button className="buttonDelete" type='button'>Delete</button>;
-    var buttonEdit = <button className='buttonEdit' type='button'>Edit</button>;
-    var buttonAdd = <button className='buttonAdd' type='button'>Add new</button>;
     recipeList = recipeList.map((e, index) =>
     { return <li onClick={() => this.handleClick(index)} className='recipeItem' key={index}>
                 {e.title}
                 <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
-                  {buttonDelete}
-                  {buttonEdit}
+                  <a href='#editWin' className="button buttonDelete" type='button'>Delete</a>
+                  <a onClick={() => this.edit()} className='button buttonEdit' type='button'>Edit</a>
                 </div>
               </li>});
     return (
       <div className="RecipeBox">
         <ul>  {recipeList} </ul>
-        {buttonAdd}
-        <EditWindow />
+        <a onClick={() => this.add()}  className='button buttonAdd' type='button'>Add Recipe</a>
+        <EditWindow isOpen={this.state.isModalOpen} onClose={() => this.close()}/>
       </div>
 
     );
