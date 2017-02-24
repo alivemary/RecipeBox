@@ -2,7 +2,7 @@
   "name": "RecipeBox",
   "version": "0.1.0",
   "private": true,
-  "homepage": "htttp://alivemary.github.io/RecipeBox",
+  "homepage": "htttps://alivemary.github.io/RecipeBox",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "react-scripts": "0.9.0"

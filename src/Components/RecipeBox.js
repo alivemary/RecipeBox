@@ -34,8 +34,11 @@ class RecipeBox extends React.Component {
   add() {
     this.setState({modal: {isOpen: true, type: 'add', index: null}});
   }
-  delete() {
-    //
+  delete(index) {
+    let newRecipes = this.state.recipes;
+    newRecipes = newRecipes.filter((item, i) => i !== index);
+    this.setState({recipes: newRecipes});
+    this.saveToLocalStorage();
   }
   close() {
     this.setState({modal: {isOpen: false, type: 'none', index: null}});
@@ -77,13 +80,12 @@ class RecipeBox extends React.Component {
   }
   render() {
     var recipeList = this.getFromLocalStorage();
-    console.log(recipeList);
     recipeList = recipeList.map((e, index) =>
     { return <li onClick={() => this.handleClick(index)} className='recipeItem' key={index}>
                 {e.title}
                 <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
-                  <a href='#editWin' className="button buttonDelete" type='button'>Delete</a>
+                  <a onClick={() => this.delete(index)} className="button buttonDelete" type='button'>Delete</a>
                   <a onClick={() => this.edit(index)}
                      className='button buttonEdit'
                      type='button'>Edit</a>
