@@ -15,30 +15,33 @@ class RecipeBox extends React.Component {
       modal: {isOpen: false, type: 'none', index: null}
 		};
     this.save=this.save.bind(this);
+
   }
   handleClick(index) {
     let current = this.state.recipes;
     current.forEach((e, i) => {
       e.classString = (i !== index) ? '' : (e.classString !== '') ? '' : 'active'
     });
-    this.setState({recipes: current});
-    this.saveToLocalStorage();
+    this.mySetState({recipes: current});
   }
-  edit(index) {
+  edit(event, index) {
     let current = this.state.modal;
     current.isOpen = true;
     current.type = 'edit';
     current.index = index;
     this.setState({modal: current});
+    event.stopPropagation();
+    this.forceUpdate();
   }
   add() {
     this.setState({modal: {isOpen: true, type: 'add', index: null}});
   }
-  delete(index) {
+  delete(event, index) {
     let newRecipes = this.state.recipes;
     newRecipes = newRecipes.filter((item, i) => i !== index);
-    this.setState({recipes: newRecipes});
-    this.saveToLocalStorage();
+    this.mySetState({recipes: newRecipes});
+    event.stopPropagation();
+    this.forceUpdate();
   }
   close() {
     this.setState({modal: {isOpen: false, type: 'none', index: null}});
@@ -56,15 +59,18 @@ class RecipeBox extends React.Component {
     else {
       newRecipes.push(current);
     }
-    this.setState({recipes: newRecipes, modal: {isOpen: false, type: 'none', index: null}});
-    this.saveToLocalStorage();
+    this.mySetState({recipes: newRecipes, modal: {isOpen: false, type: 'none', index: null}});
   }
   saveToLocalStorage() {
     let JSONRecipes = JSON.stringify(this.state.recipes);
     localStorage.setItem('RecipeBox', JSONRecipes);
   }
+  mySetState(object) {
+      this.setState(object, () => {this.saveToLocalStorage()});
+  }
   getFromLocalStorage(){
-    return JSON.parse(localStorage['RecipeBox']);
+    let recipesList = JSON.parse(localStorage['RecipeBox']);
+    this.setState({recipes: recipesList});
   }
   componentWillMount(){
     if (localStorage.getItem("RecipeBox") === null) {
@@ -72,21 +78,25 @@ class RecipeBox extends React.Component {
     }
     else {
       let JSONRecipes = JSON.stringify(this.state.recipes);
+      console.log(this.state.recipes);
       if (JSONRecipes !== localStorage['RecipeBox']) {
-        this.setState({recipes: JSON.parse(localStorage['RecipeBox'])});
+        this.getFromLocalStorage();
 
       }
     }
   }
+
   render() {
-    var recipeList = this.getFromLocalStorage();
+    var recipeList = this.state.recipes;
     recipeList = recipeList.map((e, index) =>
     { return <li onClick={() => this.handleClick(index)} className='recipeItem' key={index}>
                 {e.title}
                 <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
-                  <a onClick={() => this.delete(index)} className="button buttonDelete" type='button'>Delete</a>
-                  <a onClick={() => this.edit(index)}
+                  <a onClick={(event) => this.delete(event, index)}
+                     className="button buttonDelete"
+                     type='button'>Delete</a>
+                  <a onClick={(event) => this.edit(event, index)}
                      className='button buttonEdit'
                      type='button'>Edit</a>
                 </div>
