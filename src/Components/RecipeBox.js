@@ -2,6 +2,7 @@ import React from 'react';
 import "./RecipeBox.css";
 import Recipe from './Recipe';
 import EditWindow from './EditWindow';
+import DeleteApprove from './DeleteApprove';
 
 class RecipeBox extends React.Component {
   constructor (props) {
@@ -12,10 +13,11 @@ class RecipeBox extends React.Component {
         {title: 'Pumpkin soup', ingredients: ['pumpkin', 'cream', 'water'], classString: ''},
         {title: 'Pizza', ingredients: ['tomato', 'cheese'], classString: ''}
       ],
-      modal: {isOpen: false, type: 'none', index: null}
+      modal: {isOpen: false, type: 'none', index: null},
+      deleteApprove: {isOpen: false, index: null}
 		};
     this.save=this.save.bind(this);
-
+    this.deleteItem=this.deleteItem.bind(this);
   }
   handleClick(index) {
     let current = this.state.recipes;
@@ -36,12 +38,23 @@ class RecipeBox extends React.Component {
   add() {
     this.setState({modal: {isOpen: true, type: 'add', index: null}});
   }
-  delete(event, index) {
+  delete(index) {
     let newRecipes = this.state.recipes;
     newRecipes = newRecipes.filter((item, i) => i !== index);
     this.mySetState({recipes: newRecipes});
-    event.stopPropagation();
     this.forceUpdate();
+  }
+  deleteItem(index){
+    this.setState({deleteApprove: {isOpen: false, index: null}});
+    this.delete(index);
+
+  }
+  deleteApprove(event, i) {
+    this.setState({deleteApprove: {isOpen: true, index: i}});
+    event.stopPropagation();
+  }
+  closeApproval() {
+    this.setState({deleteApprove: {isOpen: false, index: null}});
   }
   close() {
     this.setState({modal: {isOpen: false, type: 'none', index: null}});
@@ -78,7 +91,6 @@ class RecipeBox extends React.Component {
     }
     else {
       let JSONRecipes = JSON.stringify(this.state.recipes);
-      console.log(this.state.recipes);
       if (JSONRecipes !== localStorage['RecipeBox']) {
         this.getFromLocalStorage();
 
@@ -93,7 +105,7 @@ class RecipeBox extends React.Component {
                 {e.title}
                 <div className={'recipeDetails '+e.classString}>
                   <Recipe ingredients={e.ingredients}/>
-                  <a onClick={(event) => this.delete(event, index)}
+                  <a onClick={(event) => this.deleteApprove(event, index)}
                      className="button buttonDelete"
                      type='button'>Delete</a>
                   <a onClick={(event) => this.edit(event, index)}
@@ -109,6 +121,10 @@ class RecipeBox extends React.Component {
                     modal={this.state.modal}
                     save={this.save}
                     onClose={() => this.close()} />
+        <DeleteApprove item={this.state.deleteApprove}
+                       onClose={() => this.closeApproval()}
+                       recipes={this.state.recipes}
+                       deleteItem={this.deleteItem} />
       </div>
 
     );
